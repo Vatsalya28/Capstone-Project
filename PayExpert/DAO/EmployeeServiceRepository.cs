@@ -55,7 +55,8 @@ namespace PayExpert.DAO
 
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
             return addStatus;
         }
@@ -85,7 +86,7 @@ namespace PayExpert.DAO
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
 
         }
@@ -111,7 +112,7 @@ namespace PayExpert.DAO
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
         }
         public Employee GetEmployeeById(int employeeId)

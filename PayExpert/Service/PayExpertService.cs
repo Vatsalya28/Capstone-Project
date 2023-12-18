@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace PayExpert.Service
 {
     public class PayExpertService:IPayExpertService
-    {
-        IEmployeeServiceRepository employeeRepository = new EmployeeServiceRepository();
-        IFinancialRecordServiceRepository financialrecordRepository = new FinancialRecordServiceRepository();
-        ITaxServiceRepository taxRepository = new TaxServiceRepository();
-        IPayrollServiceRepository payrollRepository = new PayrollServiceRepository();
+    { 
+    //    IEmployeeServiceRepository employeeRepository = new EmployeeServiceRepository();
+    //    IFinancialRecordServiceRepository financialrecordRepository = new FinancialRecordServiceRepository();
+    //    ITaxServiceRepository taxRepository = new TaxServiceRepository();
+    //    IPayrollServiceRepository payrollRepository = new PayrollServiceRepository();
 
         public void GetAllEmployees(IEmployeeServiceRepository repository)
         {
@@ -50,6 +50,7 @@ namespace PayExpert.Service
 
         public void AddEmployee(IEmployeeServiceRepository repository)
         {
+
             Employee newEmployee = new Employee();
 
             Console.Write("Enter First Name: ");
@@ -93,11 +94,18 @@ namespace PayExpert.Service
                 Console.WriteLine("Invalid date format. Please enter the date in the correct format (YYYY-MM-DD).");
 
             }
+            try
+            {
+                repository.AddEmployee(newEmployee);
+                Console.WriteLine("Employee added successfully.");
+            }
+            catch (DatabaseConnectionException ex)
+            {
+                Console.WriteLine($"Error adding employee: {ex.Message}");
+                
+            }
 
 
-
-            repository.AddEmployee(newEmployee);
-            Console.WriteLine("Employee added successfully.");
         }
 
         public  void UpdateEmployee(IEmployeeServiceRepository repository)
@@ -170,9 +178,17 @@ namespace PayExpert.Service
                         existingEmployee.Position = newPosition;
                     }
 
+                    try
+                    {
 
-                    repository.UpdateEmployee(existingEmployee);
-                    Console.WriteLine("Employee updated successfully.");
+                        repository.UpdateEmployee(existingEmployee);
+                        Console.WriteLine("Employee updated successfully.");
+                    }
+                    catch (DatabaseConnectionException ex)
+                    {
+                        Console.WriteLine($"Error adding employee: {ex.Message}");
+
+                    }
                 }
                 else
                 {
@@ -205,9 +221,10 @@ namespace PayExpert.Service
             {
                 Console.WriteLine($"Employee not found with ID: {ex.EmployeeId}");
             }
-            catch (InvalidInputException ex)
+            catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine($"Invalid input: {ex.Message}");
+                Console.WriteLine($"Error adding employee: {ex.Message}");
+
             }
         }
 
