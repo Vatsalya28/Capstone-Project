@@ -219,7 +219,7 @@ namespace PayExpert.DAO
             else
             {
            
-                throw new InvalidOperationException("Invalid input for Basic Salary.");
+                throw new InvalidInputException("Invalid input for Basic Salary.");
             }
         }
 
@@ -237,7 +237,7 @@ namespace PayExpert.DAO
             else
             {
        
-                throw new InvalidOperationException("Invalid input for Overtime Pay.");
+                throw new InvalidInputException("Invalid input for Overtime Pay.");
             }
         }
 
@@ -254,7 +254,7 @@ namespace PayExpert.DAO
             }
             else
             {
-                throw new InvalidOperationException("Invalid input for Deductions.");
+                throw new InvalidInputException("Invalid input for Deductions.");
             }
 
         }

@@ -11,7 +11,7 @@ namespace PayExpert.Service
 {
     public class PayExpertService:IPayExpertService
     { 
-    //    IEmployeeServiceRepository employeeRepository = new EmployeeServiceRepository();
+      // IEmployeeServiceRepository employeeRepository = new EmployeeServiceRepository();
     //    IFinancialRecordServiceRepository financialrecordRepository = new FinancialRecordServiceRepository();
     //    ITaxServiceRepository taxRepository = new TaxServiceRepository();
     //    IPayrollServiceRepository payrollRepository = new PayrollServiceRepository();
@@ -110,96 +110,102 @@ namespace PayExpert.Service
 
         public  void UpdateEmployee(IEmployeeServiceRepository repository)
         {
-            Console.Write("Enter Employee ID to update: ");
-            if (int.TryParse(Console.ReadLine(), out int employeeId))
+            try
             {
-                Employee existingEmployee = repository.GetEmployeeById(employeeId);
-
-                if (existingEmployee != null)
+                Console.Write("Enter Employee ID to update: ");
+                if (int.TryParse(Console.ReadLine(), out int employeeId))
                 {
-                    Console.WriteLine($"Current Details for Employee ID {existingEmployee.EmployeeID}:");
-                    Console.WriteLine($"1. First Name: {existingEmployee.FirstName}");
-                    Console.WriteLine($"2. Last Name: {existingEmployee.LastName}");
-                    Console.WriteLine($"3. Gender: {existingEmployee.Gender}");
-                    Console.WriteLine($"4. Email: {existingEmployee.Email}");
-                    Console.WriteLine($"5. Phone Number: {existingEmployee.PhoneNumber}");
-                    Console.WriteLine($"6. Address: {existingEmployee.Address}");
-                    Console.WriteLine($"7. Position: {existingEmployee.Position}");
+                    Employee existingEmployee = repository.GetEmployeeById(employeeId);
 
-
-                    Console.WriteLine("\nEnter updated information:");
-
-                    Console.Write("New First Name: ");
-                    string newFirstName = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(newFirstName))
+                    if (existingEmployee != null)
                     {
-                        existingEmployee.FirstName = newFirstName;
-                    }
+                        Console.WriteLine($"Current Details for Employee ID {existingEmployee.EmployeeID}:");
+                        Console.WriteLine($"1. First Name: {existingEmployee.FirstName}");
+                        Console.WriteLine($"2. Last Name: {existingEmployee.LastName}");
+                        Console.WriteLine($"3. Gender: {existingEmployee.Gender}");
+                        Console.WriteLine($"4. Email: {existingEmployee.Email}");
+                        Console.WriteLine($"5. Phone Number: {existingEmployee.PhoneNumber}");
+                        Console.WriteLine($"6. Address: {existingEmployee.Address}");
+                        Console.WriteLine($"7. Position: {existingEmployee.Position}");
 
 
-                    Console.Write("New Last Name: ");
-                    string newLastName = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(newLastName))
-                    {
-                        existingEmployee.LastName = newLastName;
-                    }
-                    Console.Write("New Gender: ");
-                    string newGender = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(newGender))
-                    {
-                        existingEmployee.Gender = newGender;
-                    }
+                        Console.WriteLine("\nEnter updated information:");
 
-                    Console.Write("New Email: ");
-                    string newEmail = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(newEmail))
-                    {
-                        existingEmployee.Email = newEmail;
-                    }
+                        Console.Write("New First Name: ");
+                        string newFirstName = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(newFirstName))
+                        {
+                            existingEmployee.FirstName = newFirstName;
+                        }
 
-                    Console.Write("New Phone Number: ");
-                    string newPhoneNumber = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(newPhoneNumber))
-                    {
-                        existingEmployee.PhoneNumber = newPhoneNumber;
-                    }
 
-                    Console.Write("New Address: ");
-                    string newAddress = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(newAddress))
-                    {
-                        existingEmployee.Address = newAddress;
-                    }
+                        Console.Write("New Last Name: ");
+                        string newLastName = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(newLastName))
+                        {
+                            existingEmployee.LastName = newLastName;
+                        }
+                        Console.Write("New Gender: ");
+                        string newGender = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(newGender))
+                        {
+                            existingEmployee.Gender = newGender;
+                        }
 
-                    Console.Write("New Position: ");
-                    string newPosition = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(newPosition))
-                    {
-                        existingEmployee.Position = newPosition;
-                    }
+                        Console.Write("New Email: ");
+                        string newEmail = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(newEmail))
+                        {
+                            existingEmployee.Email = newEmail;
+                        }
 
-                    try
-                    {
+                        Console.Write("New Phone Number: ");
+                        string newPhoneNumber = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(newPhoneNumber))
+                        {
+                            existingEmployee.PhoneNumber = newPhoneNumber;
+                        }
 
-                        repository.UpdateEmployee(existingEmployee);
-                        Console.WriteLine("Employee updated successfully.");
-                    }
-                    catch (DatabaseConnectionException ex)
-                    {
-                        Console.WriteLine($"Error adding employee: {ex.Message}");
+                        Console.Write("New Address: ");
+                        string newAddress = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(newAddress))
+                        {
+                            existingEmployee.Address = newAddress;
+                        }
 
-                    }
-                }
+                        Console.Write("New Position: ");
+                        string newPosition = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(newPosition))
+                        {
+                            existingEmployee.Position = newPosition;
+                        }
+
+                        try
+                        {
+
+                            repository.UpdateEmployee(existingEmployee);
+                            Console.WriteLine("Employee updated successfully.");
+                        }
+                        catch (DatabaseConnectionException ex)
+                        {
+                            Console.WriteLine($"Error adding employee: {ex.Message}");
+
+                        }
+                    } }
                 else
                 {
-
-                    Console.WriteLine("Employe Not Found");
+                    throw new InvalidInputException("Invalid Employee ID.");
                 }
             }
-            else
+            catch (EmployeeNotFoundException ex)
             {
-                Console.WriteLine("Invalid Employee ID.");
+                Console.WriteLine($"Employee not found with ID: {ex.EmployeeId}");
             }
+            catch(InvalidInputException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
         }
 
         public void RemoveEmployee(IEmployeeServiceRepository repository)
@@ -223,9 +229,9 @@ namespace PayExpert.Service
             }
             catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine($"Error adding employee: {ex.Message}");
-
+                Console.WriteLine($"Error removing employee: {ex.Message}");
             }
+
         }
 
         public void GetEmployeeById(IEmployeeServiceRepository repository)
@@ -280,7 +286,15 @@ namespace PayExpert.Service
                                 try
                                 {
                                     Payroll generatedPayroll = payrollRepository.GeneratePayroll(employeeId, startDate, endDate);
-                                    Console.WriteLine($"Payroll generated successfully. Payroll ID: {generatedPayroll.PayrollID}");
+                                    Console.WriteLine("Payroll generated successfully:");
+                                    Console.WriteLine($"Employee ID: {generatedPayroll.EmployeeID}");
+                                    Console.WriteLine($"Payroll ID: {generatedPayroll.PayrollID}");
+                                    Console.WriteLine($"Start Date: {generatedPayroll.PayPeriodStartDate.ToShortDateString()}");
+                                    Console.WriteLine($"End Date: {generatedPayroll.PayPeriodEndDate.ToShortDateString()}");
+                                    Console.WriteLine($"Basic Salary: {generatedPayroll.BasicSalary}");
+                                    Console.WriteLine($"Overtime Pay: {generatedPayroll.OvertimePay}");
+                                    Console.WriteLine($"Deductions: {generatedPayroll.Deductions}");
+                                    Console.WriteLine($"Net Salary: {generatedPayroll.NetSalary}");
                                 }
                                 catch (PayrollGenerationException ex)
                                 {
@@ -304,6 +318,10 @@ namespace PayExpert.Service
             {
                 Console.WriteLine($"Employee not found: {ex.Message}");
             }
+            catch(InvalidInputException ex)
+            {
+                Console.WriteLine( ex.Message);
+            }
             catch (DatabaseConnectionException ex)
             {
                 Console.WriteLine($"Error adding employee: {ex.Message}");
@@ -312,27 +330,32 @@ namespace PayExpert.Service
         }
         public void GetPayrollsForEmployee(IPayrollServiceRepository repository)
         {
-            Console.Write("Enter Employee ID to view payrolls: ");
-            if (int.TryParse(Console.ReadLine(), out int employeeId))
+            try
             {
-                var payrolls = repository.GetPayrollsForEmployee(employeeId);
-
-                if (payrolls.Count > 0)
+                Console.Write("Enter Employee ID to view payrolls: ");
+                if (int.TryParse(Console.ReadLine(), out int employeeId))
                 {
-                    foreach (var payroll in payrolls)
-                    {
+                    var payrolls = repository.GetPayrollsForEmployee(employeeId);
 
-                        Console.WriteLine($"Payroll ID: {payroll.PayrollID},Employee ID:{payroll.EmployeeID},Basic Salary:{payroll.BasicSalary} ,Net Salary: {payroll.NetSalary}");
+                    if (payrolls.Count > 0)
+                    {
+                        foreach (var payroll in payrolls)
+                        {
+
+                            Console.WriteLine($"Payroll ID: {payroll.PayrollID},Employee ID:{payroll.EmployeeID},Basic Salary:{payroll.BasicSalary} ,Net Salary: {payroll.NetSalary}");
+                        }
+                    }
+
+                    else
+                    {
+                        throw new EmployeeNotFoundException($"Employee not found with ID {employeeId}");
                     }
                 }
-                else
-                {
-                    Console.WriteLine("No payrolls found for the given employee.");
-                }
             }
-            else
+            catch (EmployeeNotFoundException ex)
             {
-                Console.WriteLine("Invalid Employee ID.");
+               
+                Console.WriteLine($"Employee not found: {ex.Message}");
             }
         }
 
@@ -584,7 +607,8 @@ namespace PayExpert.Service
 
         public void AddFinancialRecord(IFinancialRecordServiceRepository repository)
         {
-           
+            try
+            {
                 Console.WriteLine("Enter Employee ID:");
                 if (int.TryParse(Console.ReadLine(), out int employeeId))
                 {
@@ -615,11 +639,16 @@ namespace PayExpert.Service
                         Console.WriteLine("Invalid Amount");
                     }
                 }
-            else
-            {
-                Console.WriteLine("Invalid Employee ID");
+                else
+                {
+                    Console.WriteLine("Invalid Employee ID");
+                }
             }
-            
+            catch (FinancialRecordException ex)
+            {
+                Console.WriteLine($"Financial record addition error: {ex.Message}");
+
+            }
         }
 
         public void CalculateAge(IEmployeeServiceRepository repository)

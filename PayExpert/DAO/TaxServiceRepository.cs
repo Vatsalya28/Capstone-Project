@@ -143,7 +143,7 @@ namespace PayExpert.DAO
                     }
                     else
                     {
-                        throw new TaxCalculationException($"Error calculating tax: No valid data found in the Payroll table for Employee ID {employeeId} and Tax Year {taxYear}.");
+                        throw new TaxCalculationException($"Error calculating tax: No valid data found in the table for Employee ID {employeeId} and Tax Year {taxYear}.");
                     }
                 }
             }
@@ -151,10 +151,7 @@ namespace PayExpert.DAO
             {
                 throw new DatabaseConnectionException($"An error occurred while processing the database operation: {ex.Message}");
             }
-            catch (Exception ex)
-            {
-                throw new TaxCalculationException($"An unexpected error occurred during tax calculation: {ex.Message}");
-            }
+           
           
         }
 

@@ -83,7 +83,7 @@ namespace PayXpert.Test
 
         private void MockUserInput(double basicSalary, double overtimePay, double deductions)
         {
-           
+
             Console.SetIn(new StringReader($"{basicSalary}\n{overtimePay}\n{deductions}\n"));
         }
 

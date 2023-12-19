@@ -17,7 +17,11 @@ namespace PayExpert.Exceptions
             {
                 EmployeeId = employeeId;
             }
+        public EmployeeNotFoundException(string message)
+   : base(message)
+        {
         }
+    }
     
 
 }

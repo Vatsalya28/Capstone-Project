@@ -84,6 +84,7 @@ namespace PayExpert.DAO
                     cmd.ExecuteNonQuery();
                 }
             }
+
             catch (SqlException ex)
             {
 
@@ -97,24 +98,25 @@ namespace PayExpert.DAO
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                 {
-                    cmd.CommandText = "DELETE FROM Employee WHERE EmployeeID = @EmployeeID";
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@EmployeeID", employeeId);
+                   
+                        cmd.CommandText = "DELETE FROM Employee WHERE EmployeeID = @EmployeeID";
+                        cmd.Parameters.Clear();
+                        cmd.Parameters.AddWithValue("@EmployeeID", employeeId);
 
-                    cmd.Connection = sqlConnection;
-                    sqlConnection.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
+                        cmd.Connection = sqlConnection;
+                        sqlConnection.Open();
+                        int rowsAffected = cmd.ExecuteNonQuery();
 
-                    if (rowsAffected == 0)
-                    {
-                        throw new EmployeeNotFoundException(employeeId);
-                    }
+                        if (rowsAffected == 0)
+                        {
+                            throw new EmployeeNotFoundException(employeeId);
+                        }
+                    
                 }
             }
             catch (SqlException ex)
             {
-
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
+                throw new  DatabaseConnectionException("An error occurred while processing the database operation.");
             }
         }
         public Employee GetEmployeeById(int employeeId)
@@ -149,7 +151,7 @@ namespace PayExpert.DAO
                     }
                     else
                     {
-                        
+
                         throw new EmployeeNotFoundException(employeeId);
                     }
                 }
@@ -238,19 +240,14 @@ namespace PayExpert.DAO
                         DateTime currentDate = DateTime.Now;
                         age = currentDate.Year - dateOfBirth.Year;
 
-                       
-                        if (dateOfBirth > currentDate.AddYears(-age))
-                        {
-                            age--;
-                        }
                     }
                     else
                     {
-                        Console.WriteLine($"Employee with ID {employeeId} not found.");
+                        throw new EmployeeNotFoundException($"Employee with ID {employeeId} not found.");
                     }
                 }
             }
-            catch (Exception ex)
+            catch (EmployeeNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
             }
