@@ -252,9 +252,10 @@ namespace PayExpert.Service
             {
                 Console.WriteLine($"Employee not found with ID: {ex.EmployeeId}");
             }
-            catch (InvalidInputException ex)
+            catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine($"Invalid input: {ex.Message}");
+                Console.WriteLine($"Database connection error: {ex.Message}");
+
             }
 
         }
@@ -303,6 +304,11 @@ namespace PayExpert.Service
             {
                 Console.WriteLine($"Employee not found: {ex.Message}");
             }
+            catch (DatabaseConnectionException ex)
+            {
+                Console.WriteLine($"Error adding employee: {ex.Message}");
+
+            }
         }
         public void GetPayrollsForEmployee(IPayrollServiceRepository repository)
         {
@@ -332,105 +338,137 @@ namespace PayExpert.Service
 
         public  void GetPayrollsForPeriod(IPayrollServiceRepository repository)
         {
-            Console.Write("Enter Start Date for payrolls (dd/mm/yyyy): ");
-            if (DateTime.TryParse(Console.ReadLine(), out DateTime startDate))
+            try
             {
-                Console.Write("Enter End Date for payrolls (dd/mm/yyyy): ");
-                if (DateTime.TryParse(Console.ReadLine(), out DateTime endDate))
+                Console.Write("Enter Start Date for payrolls (dd/mm/yyyy): ");
+                if (DateTime.TryParse(Console.ReadLine(), out DateTime startDate))
                 {
-                    var payrolls = repository.GetPayrollsForPeriod(startDate, endDate);
-
-                    if (payrolls.Count > 0)
+                    Console.Write("Enter End Date for payrolls (dd/mm/yyyy): ");
+                    if (DateTime.TryParse(Console.ReadLine(), out DateTime endDate))
                     {
-                        foreach (var payroll in payrolls)
-                        {
+                        var payrolls = repository.GetPayrollsForPeriod(startDate, endDate);
 
-                            Console.WriteLine($"Payroll ID: {payroll.PayrollID}, Net Salary: {payroll.NetSalary}");
+                        if (payrolls.Count > 0)
+                        {
+                            foreach (var payroll in payrolls)
+                            {
+
+                                Console.WriteLine($"Payroll ID: {payroll.PayrollID}, Net Salary: {payroll.NetSalary}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("No payrolls found for the given period.");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("No payrolls found for the given period.");
+                        Console.WriteLine("Invalid End Date format.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid End Date format.");
+                    Console.WriteLine("Invalid Start Date format.");
                 }
             }
-            else
+            catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine("Invalid Start Date format.");
+                Console.WriteLine($"Error adding employee: {ex.Message}");
+
             }
         }
         public void GetTaxById(ITaxServiceRepository repository)
         {
-            Console.WriteLine("Enter Tax ID to view:");
-            if (int.TryParse(Console.ReadLine(), out int taxId))
+            try
             {
-                Tax tax = repository.GetTaxForId(taxId);
-                if (tax != null)
+                Console.WriteLine("Enter Tax ID to view:");
+                if (int.TryParse(Console.ReadLine(), out int taxId))
                 {
-                    Console.WriteLine($"Tax Id:{tax.TaxID},Employee ID:{tax.EmployeeID},Tax Year:{tax.TaxYear},Taxable Income:{tax.TaxableIncome}");
+                    Tax tax = repository.GetTaxForId(taxId);
+                    if (tax != null)
+                    {
+                        Console.WriteLine($"Tax Id:{tax.TaxID},Employee ID:{tax.EmployeeID},Tax Year:{tax.TaxYear},Taxable Income:{tax.TaxableIncome}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Tax Id not found");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Tax Id not found");
+                    Console.WriteLine("Invalid Tax Id");
                 }
             }
-            else
+            catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine("Invalid Tax Id");
+                Console.WriteLine($"Error adding : {ex.Message}");
+
             }
         }
         public  void GetTaxesForEmployee(ITaxServiceRepository repository)
         {
-            Console.Write("Enter Employee ID to view Tax: ");
-            if (int.TryParse(Console.ReadLine(), out int employeeId))
+            try
             {
-                var taxes = repository.GetTaxesForEmployee(employeeId);
-
-                if (taxes.Count > 0)
+                Console.Write("Enter Employee ID to view Tax: ");
+                if (int.TryParse(Console.ReadLine(), out int employeeId))
                 {
-                    foreach (var tax in taxes)
-                    {
+                    var taxes = repository.GetTaxesForEmployee(employeeId);
 
-                        Console.WriteLine($"Tax ID: {tax.TaxID},Employee ID:{tax.EmployeeID},Tax Year:{tax.TaxYear} ,Taxable Income: {tax.TaxableIncome}");
+                    if (taxes.Count > 0)
+                    {
+                        foreach (var tax in taxes)
+                        {
+
+                            Console.WriteLine($"Tax ID: {tax.TaxID},Employee ID:{tax.EmployeeID},Tax Year:{tax.TaxYear} ,Taxable Income: {tax.TaxableIncome}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Tax Record found for the given employee.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("No Tax Record found for the given employee.");
+                    Console.WriteLine("Invalid Employee ID.");
                 }
             }
-            else
+            catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine("Invalid Employee ID.");
+                Console.WriteLine($"Error adding : {ex.Message}");
+
             }
         }
         public void GetTaxForYear(ITaxServiceRepository repository)
         {
-            Console.WriteLine("Enter Tax Year to view:");
-            if (int.TryParse(Console.ReadLine(), out int taxYear))
+            try
             {
-                var taxes = repository.GetTaxForYear(taxYear);
-                Console.WriteLine($"Number of records for the year: {taxes.Count}");
-
-                if (taxes != null && taxes.Any())
+                Console.WriteLine("Enter Tax Year to view:");
+                if (int.TryParse(Console.ReadLine(), out int taxYear))
                 {
-                    foreach (var tax in taxes)
+                    var taxes = repository.GetTaxForYear(taxYear);
+                    Console.WriteLine($"Number of records for the year: {taxes.Count}");
+
+                    if (taxes != null && taxes.Any())
                     {
-                        Console.WriteLine($"Tax Id:{tax.TaxID}, Employee ID:{tax.EmployeeID}, Tax Year:{tax.TaxYear}, Taxable Income:{tax.TaxableIncome}");
+                        foreach (var tax in taxes)
+                        {
+                            Console.WriteLine($"Tax Id:{tax.TaxID}, Employee ID:{tax.EmployeeID}, Tax Year:{tax.TaxYear}, Taxable Income:{tax.TaxableIncome}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No records for this year");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("No records for this year");
+                    Console.WriteLine("Invalid Tax Year");
                 }
             }
-            else
+            catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine("Invalid Tax Year");
+                Console.WriteLine($"Error adding : {ex.Message}");
+
             }
         }
 
@@ -456,23 +494,21 @@ namespace PayExpert.Service
                 else
                 {
                     Console.WriteLine("Invalid Employee ID input.");
-                    throw new EmployeeNotFoundException(employeeId);
+                 
                 }
             }
             catch (TaxCalculationException ex)
             {
                 Console.WriteLine($"Tax calculation error: {ex.Message}");
             }
-            catch (InvalidInputException ex)
+            catch (DatabaseConnectionException ex)
             {
-                Console.WriteLine($"Invalid input: {ex.Message}");
-            }
-            catch (EmployeeNotFoundException ex)
-            {
-                Console.WriteLine($"Employee not found: {ex.Message}");
-            }
-        }
+                Console.WriteLine($"Error adding : {ex.Message}");
 
+            }
+
+
+        }
 
         public void GetFinancialRecordById(IFinancialRecordServiceRepository repository)
         {
@@ -523,7 +559,7 @@ namespace PayExpert.Service
 
         public void GetFinancialRecordsForDate(IFinancialRecordServiceRepository repository)
         {
-            Console.WriteLine("Enter Record Date to view financial records:");
+            Console.WriteLine("Enter Record Date to view financial records(yy/mm/dd):");
             if (DateTime.TryParse(Console.ReadLine(), out DateTime recordDate))
             {
                 var recordsForDate = repository.GetFinancialRecordsForDate(recordDate);
@@ -548,40 +584,42 @@ namespace PayExpert.Service
 
         public void AddFinancialRecord(IFinancialRecordServiceRepository repository)
         {
-            Console.WriteLine("Enter Employee ID:");
-            if (int.TryParse(Console.ReadLine(), out int employeeId))
-            {
-                Console.WriteLine("Enter Description:");
-                string description = Console.ReadLine();
-
-                Console.WriteLine("Enter Amount:");
-                if (double.TryParse(Console.ReadLine(), out double amount))
+           
+                Console.WriteLine("Enter Employee ID:");
+                if (int.TryParse(Console.ReadLine(), out int employeeId))
                 {
-                    Console.WriteLine("Enter Record Type:");
-                    string recordType = Console.ReadLine();
+                    Console.WriteLine("Enter Description:");
+                    string description = Console.ReadLine();
 
-                    DateTime recordDate = DateTime.Today;
-
-                    try
+                    Console.WriteLine("Enter Amount:");
+                    if (double.TryParse(Console.ReadLine(), out double amount))
                     {
-                        repository.AddFinancialRecord(employeeId, description, amount, recordType, recordDate);
-                        Console.WriteLine("Financial Record added successfully!");
+                        Console.WriteLine("Enter Record Type:");
+                        string recordType = Console.ReadLine();
+
+                        DateTime recordDate = DateTime.Today;
+
+                        try
+                        {
+                            repository.AddFinancialRecord(employeeId, description, amount, recordType, recordDate);
+                            Console.WriteLine("Financial Record added successfully!");
+                        }
+                        catch (FinancialRecordException ex)
+                        {
+                            Console.WriteLine($"Financial record addition error: {ex.Message}");
+
+                        }
                     }
-                    catch (FinancialRecordException ex)
+                    else
                     {
-                        Console.WriteLine($"Financial record addition error: {ex.Message}");
-
+                        Console.WriteLine("Invalid Amount");
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Invalid Employee ID");
-                }
-            }
             else
             {
                 Console.WriteLine("Invalid Employee ID");
             }
+            
         }
 
         public void CalculateAge(IEmployeeServiceRepository repository)

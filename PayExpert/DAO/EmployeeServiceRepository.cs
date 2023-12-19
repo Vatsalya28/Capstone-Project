@@ -53,7 +53,7 @@ namespace PayExpert.DAO
 
             }
 
-            catch (Exception ex)
+            catch (SqlException ex)
             {
                
                 throw new DatabaseConnectionException("An error occurred while processing the database operation.");
@@ -84,8 +84,9 @@ namespace PayExpert.DAO
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
+
                 throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
 
@@ -110,8 +111,9 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
+
                 throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
         }
@@ -152,10 +154,10 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-              
-                Console.WriteLine(ex.Message);
+
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
 
             return employee;

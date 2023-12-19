@@ -51,9 +51,10 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
 
             return payroll;
@@ -93,9 +94,10 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
 
             return payrolls;
@@ -136,11 +138,11 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
-            }
 
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
+            }
             return payrolls;
         }
 
@@ -192,9 +194,10 @@ namespace PayExpert.DAO
                 
                 Console.WriteLine($"Payroll generation error: {ex.Message}");
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
 
             return payroll;
@@ -215,7 +218,7 @@ namespace PayExpert.DAO
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a valid number for Basic Salary.");
+           
                 throw new InvalidOperationException("Invalid input for Basic Salary.");
             }
         }
@@ -233,7 +236,7 @@ namespace PayExpert.DAO
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a valid number for Overtime Pay.");
+       
                 throw new InvalidOperationException("Invalid input for Overtime Pay.");
             }
         }
@@ -251,7 +254,6 @@ namespace PayExpert.DAO
             }
             else
             {
-                Console.WriteLine("Invalid input. Please enter a valid number for Deductions.");
                 throw new InvalidOperationException("Invalid input for Deductions.");
             }
 

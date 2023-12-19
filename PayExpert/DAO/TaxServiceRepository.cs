@@ -44,9 +44,10 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch(Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
             return tax;
         }
@@ -77,9 +78,10 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch(Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine( ex.Message);
+
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
             return taxes;
         }
@@ -110,17 +112,18 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine(ex.Message);
+
+                throw new DatabaseConnectionException("An error occurred while processing the database operation.");
             }
             return taxes;
         }
 
-         private const double FixedTaxRate = 0.1;
+        private const double FixedTaxRate = 0.1;
+
         public double CalculateTax(int employeeId, int taxYear)
         {
-            double totalTax = 0.0;
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(connectionString))
@@ -136,15 +139,23 @@ namespace PayExpert.DAO
                     if (result != null && result != DBNull.Value)
                     {
                         double totalNetSalary = Convert.ToDouble(result);
-                        totalTax = totalNetSalary * FixedTaxRate;
+                        return totalNetSalary * FixedTaxRate;
+                    }
+                    else
+                    {
+                        throw new TaxCalculationException($"Error calculating tax: No valid data found in the Payroll table for Employee ID {employeeId} and Tax Year {taxYear}.");
                     }
                 }
             }
+            catch (SqlException ex)
+            {
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation: {ex.Message}");
+            }
             catch (Exception ex)
             {
-                throw new TaxCalculationException($"Error calculating tax: {ex.Message}");
+                throw new TaxCalculationException($"An unexpected error occurred during tax calculation: {ex.Message}");
             }
-            return totalTax;
+          
         }
 
 
