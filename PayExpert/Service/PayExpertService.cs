@@ -303,13 +303,13 @@ namespace PayExpert.Service
                             else
                             {
                                 Console.WriteLine("Invalid End Date format.");
-                                throw new PayrollGenerationException("Error generating payroll");
+                          
                             }
                         }
                         else
                         {
                             Console.WriteLine("Invalid Start Date format.");
-                            throw new PayrollGenerationException("Error generating payroll");
+                          
                         }
                     }
 

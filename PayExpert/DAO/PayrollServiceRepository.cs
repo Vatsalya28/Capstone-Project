@@ -182,7 +182,7 @@ namespace PayExpert.DAO
                     }
                     else
                     {
-                        Console.WriteLine("Failed to generate payroll. Payroll ID not returned.");
+                        throw new PayrollGenerationException("Error generating payroll");
                     }
                 }
             }
