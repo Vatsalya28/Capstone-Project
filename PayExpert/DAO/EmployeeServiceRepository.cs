@@ -243,11 +243,14 @@ namespace PayExpert.DAO
                     }
                 }
             }
-            catch (EmployeeNotFoundException ex)
+            catch(EmployeeNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+            }
             return age;
         }
 

@@ -286,8 +286,7 @@ namespace PayExpert.Service
                             Console.Write("Enter Pay Period End Date (yyyy-MM-dd): ");
                             if (DateTime.TryParse(Console.ReadLine(), out DateTime endDate))
                             {
-                                try
-                                {
+                              
                                     Payroll generatedPayroll = payrollRepository.GeneratePayroll(employeeId, startDate, endDate);
                                     Console.WriteLine("Payroll generated successfully:");
                                     Console.WriteLine($"Employee ID: {generatedPayroll.EmployeeID}");
@@ -298,20 +297,19 @@ namespace PayExpert.Service
                                     Console.WriteLine($"Overtime Pay: {generatedPayroll.OvertimePay}");
                                     Console.WriteLine($"Deductions: {generatedPayroll.Deductions}");
                                     Console.WriteLine($"Net Salary: {generatedPayroll.NetSalary}");
-                                }
-                                catch (PayrollGenerationException ex)
-                                {
-                                    Console.WriteLine($"Payroll generation error: {ex.Message}");
-                                }
+                                
+                               
                             }
                             else
                             {
-                               throw new InvalidInputException("Invalid End Date format.");
+                                Console.WriteLine("Invalid End Date format.");
+                                throw new PayrollGenerationException("Error generating payroll");
                             }
                         }
                         else
                         {
-                          throw new InvalidInputException("Invalid Start Date format.");
+                            Console.WriteLine("Invalid Start Date format.");
+                            throw new PayrollGenerationException("Error generating payroll");
                         }
                     }
 
@@ -321,9 +319,9 @@ namespace PayExpert.Service
             {
                 Console.WriteLine($"Employee not found: {ex.Message}");
             }
-            catch(InvalidInputException ex)
+            catch(PayrollGenerationException ex)
             {
-                Console.WriteLine( ex.Message);
+                Console.WriteLine(ex.Message);
             }
             catch (DatabaseConnectionException ex)
             {
@@ -660,8 +658,7 @@ namespace PayExpert.Service
 
         public void CalculateAge(IEmployeeServiceRepository repository)
         {
-            try
-            {
+         
                 Console.Write("Enter Employee ID : ");
                 if (int.TryParse(Console.ReadLine(), out int employeeId))
                 {
@@ -671,14 +668,7 @@ namespace PayExpert.Service
                     {
                         Console.WriteLine($"Age of Employee with ID {employeeId}: {age} years");
                     }
-
-
-                }
-            }
-            catch (EmployeeNotFoundException ex)
-            {
-                Console.WriteLine($"Employee not found with ID: {ex.EmployeeId}");
-            }
+}
 
         }
 
