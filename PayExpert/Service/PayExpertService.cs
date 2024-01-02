@@ -11,11 +11,6 @@ namespace PayExpert.Service
 {
     public class PayExpertService:IPayExpertService
     { 
-      // IEmployeeServiceRepository employeeRepository = new EmployeeServiceRepository();
-    //    IFinancialRecordServiceRepository financialrecordRepository = new FinancialRecordServiceRepository();
-    //    ITaxServiceRepository taxRepository = new TaxServiceRepository();
-    //    IPayrollServiceRepository payrollRepository = new PayrollServiceRepository();
-
         public void GetAllEmployees(IEmployeeServiceRepository repository)
         {
             var employees = repository.GetAllEmployees();
@@ -223,6 +218,10 @@ namespace PayExpert.Service
                     throw new InvalidInputException("Invalid employee ID input.");
                 }
             }
+            catch(InvalidInputException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             catch (EmployeeNotFoundException ex)
             {
                 Console.WriteLine($"Employee not found with ID: {ex.EmployeeId}");
@@ -253,6 +252,10 @@ namespace PayExpert.Service
                 {
                     throw new InvalidInputException("Invalid Employee ID.");
                 }
+            }
+            catch (InvalidInputException ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             catch (EmployeeNotFoundException ex)
             {
@@ -303,12 +306,12 @@ namespace PayExpert.Service
                             }
                             else
                             {
-                                Console.WriteLine("Invalid End Date format.");
+                               throw new InvalidInputException("Invalid End Date format.");
                             }
                         }
                         else
                         {
-                            Console.WriteLine("Invalid Start Date format.");
+                          throw new InvalidInputException("Invalid Start Date format.");
                         }
                     }
 
@@ -345,11 +348,14 @@ namespace PayExpert.Service
                             Console.WriteLine($"Payroll ID: {payroll.PayrollID},Employee ID:{payroll.EmployeeID},Basic Salary:{payroll.BasicSalary} ,Net Salary: {payroll.NetSalary}");
                         }
                     }
-
                     else
                     {
-                        throw new EmployeeNotFoundException($"Employee not found with ID {employeeId}");
+                        throw new EmployeeNotFoundException("No employee");
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input");
                 }
             }
             catch (EmployeeNotFoundException ex)
@@ -357,6 +363,7 @@ namespace PayExpert.Service
                
                 Console.WriteLine($"Employee not found: {ex.Message}");
             }
+            
         }
 
         public  void GetPayrollsForPeriod(IPayrollServiceRepository repository)

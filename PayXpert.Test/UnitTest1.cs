@@ -43,7 +43,7 @@ namespace PayXpert.Test
             payrollServiceRepository.connectionString = connectionString;
 
 
-            int employeeId = 1;
+            int employeeId = 10;
 
 
             DateTime startDate = new DateTime(2023, 1, 1);
@@ -116,7 +116,7 @@ namespace PayXpert.Test
             TaxServiceRepository taxServiceRepository = new TaxServiceRepository();
             taxServiceRepository.connectionString = connectionString;
             int employeeId = 1;
-            int taxYear = DateTime.Now.Year;
+            int taxYear = 2023;
             double calculatedTax = taxServiceRepository.CalculateTax(employeeId, taxYear);
             Assert.GreaterOrEqual(calculatedTax, 0.0, "Tax should not be negative");
         }
