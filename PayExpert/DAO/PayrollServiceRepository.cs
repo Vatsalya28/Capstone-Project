@@ -53,8 +53,7 @@ namespace PayExpert.DAO
             }
             catch (SqlException ex)
             {
-
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
 
             return payroll;
@@ -96,8 +95,7 @@ namespace PayExpert.DAO
             }
             catch (SqlException ex)
             {
-
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
 
             return payrolls;
@@ -141,7 +139,7 @@ namespace PayExpert.DAO
             catch (SqlException ex)
             {
 
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
             return payrolls;
         }
@@ -184,20 +182,14 @@ namespace PayExpert.DAO
                     }
                     else
                     {
-                        
-                        throw new PayrollGenerationException("Error: Payroll ID not retrieved after insertion.");
+                        Console.WriteLine("Failed to generate payroll. Payroll ID not returned.");
                     }
                 }
-}
-            catch (PayrollGenerationException ex)
-            {
-                
-                Console.WriteLine($"Payroll generation error: {ex.Message}");
             }
             catch (SqlException ex)
             {
 
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex  );
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
 
             return payroll;

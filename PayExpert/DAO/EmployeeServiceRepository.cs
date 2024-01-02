@@ -54,8 +54,7 @@ namespace PayExpert.DAO
             }
             catch (SqlException ex)
             {
-
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
             return addStatus;
         }
@@ -86,8 +85,7 @@ namespace PayExpert.DAO
 
             catch (SqlException ex)
             {
-
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.",ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
 
         }
@@ -115,7 +113,7 @@ namespace PayExpert.DAO
             }
             catch (SqlException ex)
             {
-                throw new  DatabaseConnectionException("An error occurred while processing the database operation.",ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
         }
         public Employee GetEmployeeById(int employeeId)
@@ -158,7 +156,7 @@ namespace PayExpert.DAO
             catch (SqlException ex)
             {
 
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
 
             return employee;
@@ -197,11 +195,10 @@ namespace PayExpert.DAO
                             employee.JoiningDate = (DateTime?)reader["JoiningDate"];
                         }
 
-
-                        employee.TerminationDate = reader["TerminationDate"] != DBNull.Value
-                            ? (DateTime?)reader["TerminationDate"]
-                            : null;
-
+                        if (reader["TerminationDate"] != DBNull.Value)
+                        {
+                            employee.TerminationDate = (DateTime?)reader["TerminationDate"];
+                        }
                         employees.Add(employee);
                     }
                 }

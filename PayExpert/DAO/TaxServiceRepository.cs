@@ -47,7 +47,7 @@ namespace PayExpert.DAO
             catch (SqlException ex)
             {
 
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
             return tax;
         }
@@ -81,7 +81,7 @@ namespace PayExpert.DAO
             catch (SqlException ex)
             {
 
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
             return taxes;
         }
@@ -115,7 +115,7 @@ namespace PayExpert.DAO
             catch (SqlException ex)
             {
 
-                throw new DatabaseConnectionException("An error occurred while processing the database operation.", ex);
+                throw new DatabaseConnectionException($"An error occurred while processing the database operation.{ex.Message}");
             }
             return taxes;
         }
